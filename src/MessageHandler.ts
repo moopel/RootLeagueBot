@@ -9,36 +9,31 @@ import {
   ChannelMessageCreatedEvent,
   ChannelMessageCreateRequest,
   RootApiException,
+  ChannelGuid,
 } from "@rootsdk/server-bot";
+import { RootMessage } from "./models/RootMessage";
 
 // Initialize your Bot (set up your database, subscribe to community events, etc.)
-export function initializeExample(): void {
+export function initializeHandler(): void {
   // Example: subscribe to be notified when members post new messages to any channel your Bot can see
-  rootServer.community.channelMessages.on(
-    ChannelMessageEvent.ChannelMessageCreated,
-    onMessage,
-  );
+  rootServer.community.channelMessages.on(ChannelMessageEvent.ChannelMessageCreated, onMessage);
 }
 
-// Example: process channel messages that start with "/echo ", send back the incoming text
 async function onMessage(evt: ChannelMessageCreatedEvent): Promise<void> {
   // Ignore Root System messages - they aren't of interest to the Bot, nor will they have any 'messageContent'
   if (evt.messageType === MessageType.System) return;
 
-  const prefix: string = "/echo ";
+  const message: RootMessage = new RootMessage(evt.messageContent, evt.messageType);
 
-  // You receive all messages, only respond to ones that start with "/echo "
-  if (!evt.messageContent?.startsWith(prefix)) return;
+  let responseMessage: string = "Processing...";
 
-  // Retrieve the incoming message text without the "/echo " prefix
-  const incomingText: string = evt.messageContent
-    ?.substring(prefix.length)
-    .trim();
+  await sendMessage(evt.channelId, responseMessage);
+}
 
-  // Prepare the response - echo the incoming text to the same channel as the incoming message
+async function sendMessage(channelId: ChannelGuid, message: string) {
   const createMessageRequest: ChannelMessageCreateRequest = {
-    channelId: evt.channelId,
-    content: incomingText,
+    channelId: channelId,
+    content: message,
   };
 
   try {

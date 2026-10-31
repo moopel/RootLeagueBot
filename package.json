@@ -12,11 +12,16 @@
   },
   "devDependencies": {
     "@rootsdk/dev-tools": "*",
-    "typescript": "^5.8.2"
+    "@types/node": "^26.6.6",
+    "eslint": "^10.14.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.72.1"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "npm run lint && tsc",
     "clean": "node clean.js",
-    "bot": "rootsdk start devhost"
+    "bot": "rootsdk start devhost",
+    "lint": "eslint src",
+    "test": "node --test --experimental-strip-types \"tests/**/*.ts\""
   }
 }
