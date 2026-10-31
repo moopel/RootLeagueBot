@@ -11,11 +11,10 @@ import {
   RootApiException,
   ChannelGuid,
 } from "@rootsdk/server-bot";
-import { RootMessage } from "./models/RootMessage";
+import { RootMessage } from "../models/RootMessage";
 
-// Initialize your Bot (set up your database, subscribe to community events, etc.)
-export function initializeHandler(): void {
-  // Example: subscribe to be notified when members post new messages to any channel your Bot can see
+export function initializeMessageHandler(): void {
+  // subscribe to be notified when members post new messages to any channel your Bot can see
   rootServer.community.channelMessages.on(ChannelMessageEvent.ChannelMessageCreated, onMessage);
 }
 

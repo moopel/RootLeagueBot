@@ -30,11 +30,11 @@ export class RootMessage {
 
     let type: RootResponseType | null = null;
 
-    if (contains(message, "/addleagueuser", { ignoreCase: true }))
-      type = RootResponseType.addLeagueUser;
-    else if (contains(message, "/getpatch", { ignoreCase: true })) {
+    if (contains(message, `/${RootResponseType.register}`, { ignoreCase: true }))
+      type = RootResponseType.register;
+    else if (contains(message, `/${RootResponseType.getPatch}`, { ignoreCase: true })) {
       type = RootResponseType.getPatch;
-    } else if (contains(message, "/echo", { ignoreCase: true })) {
+    } else if (contains(message, `/${RootResponseType.echo}`, { ignoreCase: true })) {
       type = RootResponseType.echo;
     }
 

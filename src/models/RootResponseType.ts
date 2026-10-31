@@ -1,6 +1,6 @@
 export enum RootResponseType {
-  addLeagueUser,
-  getPatch,
-  echo,
-  ignore,
+  register = "register",
+  getPatch = "getPatch",
+  echo = "echo",
+  ignore = "",
 }
