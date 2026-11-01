@@ -1,16 +1,14 @@
-import serverBot from "@rootsdk/server-bot";
-import type { MessageType as RootMessageType } from "@rootsdk/server-bot";
+import { MessageType } from "@rootsdk/server-bot";
 import { doesContain } from "../utils/string.ts";
 import { COMMAND_REGEX } from "../Constants/Regex.ts";
 import { RootResponseType } from "../models/RootResponseType.ts";
-
-const { MessageType } = serverBot;
+import { LogInfo } from "../Services/LoggerService.ts";
 
 export class RootMessage {
   public readonly Target: string | null;
   public readonly Type: RootResponseType;
 
-  public constructor(message: string, messageType: RootMessageType) {
+  public constructor(message: string, messageType: MessageType) {
     if (messageType === MessageType.System) {
       this.Target = null;
       this.Type = RootResponseType.ignore;
@@ -40,6 +38,8 @@ export class RootMessage {
     } else if (doesContain(message, `/${RootResponseType.echo}`, { ignoreCase: true })) {
       type = RootResponseType.echo;
     }
+
+    LogInfo(`Command: ${command} , CommandTarget: ${commandTarget} , Type: ${type}`);
 
     this.Type = type ?? RootResponseType.ignore;
     this.Target = commandTarget;

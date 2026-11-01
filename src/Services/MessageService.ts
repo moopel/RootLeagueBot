@@ -15,6 +15,8 @@ import { RootMessage } from "../models/RootMessage";
 import { RootResponseType } from "../models/RootResponseType";
 import { registerLeagueUser } from "./LeagueUserService";
 import { getUserData } from "./UserService";
+import { LogLevel } from "../models/LogLevel";
+import { Log } from "./LoggerService";
 
 export function initializeMessageHandler(): void {
   // subscribe to be notified when members post new messages to any channel your Bot can see
@@ -22,8 +24,7 @@ export function initializeMessageHandler(): void {
 }
 
 async function onMessage(event: ChannelMessageCreatedEvent): Promise<void> {
-  // Ignore Root System messages - they aren't of interest to the Bot, nor will they have any 'messageContent'
-  if (event.messageType === MessageType.System) return;
+  if (!event.messageContent.startsWith("/")) return;
 
   const user = await getUserData(event.userId);
 
@@ -41,12 +42,24 @@ async function onMessage(event: ChannelMessageCreatedEvent): Promise<void> {
 
   let responseMessage: string = "Processing...";
 
+  Log({
+    message: `Processing Message ${event.messageContent} for user ${user.nickname}. [Type ${message.Type} | Target ${message.Target}]`,
+    level: LogLevel.Info,
+  });
+
   switch (message.Type) {
     case RootResponseType.register: {
       responseMessage = await registerLeagueUser(user, message.Target);
       break;
     }
-    // TODO: Implement handlers for the other recognized response types.
+    case RootResponseType.getPatch: {
+      responseMessage = "Patch";
+      break;
+    }
+    case RootResponseType.echo: {
+      responseMessage = `Echo: ${message.Target}`;
+      break;
+    }
     default: {
       responseMessage = `Could not process message of type ${message.Type}`;
       break;

@@ -11,13 +11,13 @@ import { LogLevel } from "../models/LogLevel";
 
 export async function getUserData(userId: UserGuid): Promise<RootUser | null> {
   const request: CommunityMemberGetRequest = { userId: userId };
-  let member;
+  let member: RootUser | null = null;
 
   try {
-    const member: CommunityMember = await rootServer.community.communityMembers.get(request);
-    return new RootUser(member.nickname, member.nickname, userId);
+    const u: CommunityMember = await rootServer.community.communityMembers.get(request);
+    member = new RootUser(u.nickname, u.nickname, userId);
   } catch (error) {
     await Log({ error, level: LogLevel.Error });
-    return null;
   }
+  return member;
 }

@@ -1,4 +1,5 @@
 /.env
+rootsdk.sqlite3
 # Logs
 logs
 *.log
