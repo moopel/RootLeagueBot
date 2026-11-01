@@ -22,3 +22,10 @@ test("RootMessage toString includes its type and target", () => {
   );
   assert.equal(`${message}`, message.toString());
 });
+
+test("RootMessage ignores system messages", () => {
+  const message = new RootMessage("", 2 as MessageType);
+
+  assert.equal(message.Type, RootResponseType.ignore);
+  assert.equal(message.Target, null);
+});
