@@ -143,3 +143,5 @@ tools/gotestsum.exe.hash
 !tsc/testdata/submoduleTriaged.txt
 
 misc/
+
+*.pkg
