@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { join } from "node:path";
+import path from "node:path";
 import type { Database as SqliteDatabase } from "sqlite3";
 import sqlite3 from "sqlite3";
 import type { UserGuid } from "@rootsdk/server-bot";
@@ -16,7 +16,7 @@ const { Database } = sqlite3;
 let database: SqliteDatabase | undefined;
 
 export async function initializeDatabase(): Promise<void> {
-  const require = createRequire(join(process.cwd(), "package.json"));
+  const require = createRequire(path.join(process.cwd(), "package.json"));
   const { rootServer } = require("@rootsdk/server-bot") as typeof import("@rootsdk/server-bot");
   const filename = rootServer.dataStore.config.sqlite3?.filename;
   if (filename === undefined) {
