@@ -24,6 +24,28 @@ jobs:
       - name: Build bot
         run: npm run build
 
+      - name: Set Root package version
+        env:
+          CI_RUN_NUMBER: ${{ github.run_number }}
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+          const manifestPath = "root-manifest.json";
+          const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+          const versionMatch = /^(\d+)\.(\d+)\.(\d+)$/.exec(manifest.version);
+
+          if (!versionMatch) {
+            throw new Error(`Expected a stable numeric version, got: ${manifest.version}`);
+          }
+
+          const runNumber = BigInt(process.env.CI_RUN_NUMBER);
+          const [, major, minor, patch] = versionMatch;
+          manifest.version = `${major}.${minor}.${BigInt(patch) + runNumber}`;
+
+          fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+          console.log(`Publishing Root app version ${manifest.version}`);
+          NODE
+
       - name: Build Root package
         run: npx rootsdk build package --output-file ./rootapp.pkg --project-folder .
 
