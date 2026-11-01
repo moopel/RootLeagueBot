@@ -29,4 +29,17 @@ export default tseslint.config(
       "unicorn/single-line-block-comment-style": "off",
     },
   },
+  {
+    files: ["src/Services/DatabaseService.ts"],
+    rules: {
+      "unicorn/no-this-outside-of-class": "off",
+      "unicorn/no-top-level-assignment-in-function": "off",
+    },
+  },
+  {
+    files: ["src/main.ts"],
+    rules: {
+      "unicorn/prefer-top-level-await": "off",
+    },
+  },
 );
