@@ -1,6 +1,6 @@
 {
   "name": "@rootleaguebot/bot",
-  "author": "",
+  "author": "Moopel",
   "description": "rootleaguebot Bot",
   "version": "1.0.0",
   "private": true,
@@ -8,12 +8,14 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@rootsdk/server-bot": "*"
+    "@rootsdk/server-bot": "*",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@rootsdk/dev-tools": "*",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
+    "eslint-plugin-unicorn": "^79.0.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.72.1"
   },

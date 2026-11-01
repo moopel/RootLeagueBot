@@ -1,0 +1,42 @@
+name: Deploy Root app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build bot
+        run: npm run build
+
+      - name: Build Root package
+        run: npx rootsdk build package --output-file ./rootapp.pkg --project-folder .
+
+      - name: Upload Root package
+        env:
+          ROOTAPP_AUTH_TOKEN: ${{ secrets.ROOTAPP_AUTH_TOKEN }}
+        run: |
+          if [ -z "$ROOTAPP_AUTH_TOKEN" ]; then
+            echo "Missing required GitHub Actions secret: ROOTAPP_AUTH_TOKEN" >&2
+            exit 1
+          fi
+
+          npx rootsdk upload package \
+            --file ./rootapp.pkg \
+            --authToken "$ROOTAPP_AUTH_TOKEN" \
+            --host dev.rootapp.com

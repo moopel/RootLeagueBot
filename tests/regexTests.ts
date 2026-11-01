@@ -7,7 +7,7 @@ test("COMMAND_REGEX matches slash commands with arguments", () => {
   const match = "/echo hello world".match(COMMAND_REGEX);
 
   assert.ok(match);
-  assert.not.null(match);
+  assert.notEqual(match, null);
   assert.equal(match[1], "/echo");
   assert.equal(match[2], "hello world");
 });

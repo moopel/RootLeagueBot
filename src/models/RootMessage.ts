@@ -1,13 +1,16 @@
-import { MessageType } from "@rootsdk/server-bot";
-import { contains } from "../utils/string";
-import { COMMAND_REGEX } from "../Constants/Regex";
-import { RootResponseType } from "../models/RootResponseType";
+import serverBot from "@rootsdk/server-bot";
+import type { MessageType as RootMessageType } from "@rootsdk/server-bot";
+import { doesContain } from "../utils/string.ts";
+import { COMMAND_REGEX } from "../Constants/Regex.ts";
+import { RootResponseType } from "../models/RootResponseType.ts";
+
+const { MessageType } = serverBot;
 
 export class RootMessage {
   public readonly Target: string | null;
   public readonly Type: RootResponseType;
 
-  public constructor(message: string, messageType: MessageType) {
+  public constructor(message: string, messageType: RootMessageType) {
     if (messageType === MessageType.System) {
       this.Target = null;
       this.Type = RootResponseType.ignore;
@@ -30,15 +33,19 @@ export class RootMessage {
 
     let type: RootResponseType | null = null;
 
-    if (contains(message, `/${RootResponseType.register}`, { ignoreCase: true }))
+    if (doesContain(message, `/${RootResponseType.register}`, { ignoreCase: true }))
       type = RootResponseType.register;
-    else if (contains(message, `/${RootResponseType.getPatch}`, { ignoreCase: true })) {
+    else if (doesContain(message, `/${RootResponseType.getPatch}`, { ignoreCase: true })) {
       type = RootResponseType.getPatch;
-    } else if (contains(message, `/${RootResponseType.echo}`, { ignoreCase: true })) {
+    } else if (doesContain(message, `/${RootResponseType.echo}`, { ignoreCase: true })) {
       type = RootResponseType.echo;
     }
 
     this.Type = type ?? RootResponseType.ignore;
     this.Target = commandTarget;
+  }
+
+  toString(): string {
+    return `RootMessage(Type=${this.Type}, Target=${this.Target ?? "none"})`;
   }
 }
